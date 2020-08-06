@@ -2,10 +2,6 @@ var BLOCKID = 0
 var BLOCKS = []
  
 
-function deleteBlock(num) {
-
-}
-
 function newCodeBlock(num) {
     let codeBlock = 
     `<div id=\"codeblock\">
@@ -23,6 +19,7 @@ function newCodeBlock(num) {
             console.log(res)
         }
     })
+
     $('body').on('click', `#delete-code${num}`, function() {
         for (i in BLOCKS) {
             if (i == num) {
@@ -45,8 +42,6 @@ $(document).ready(function(){
         $('#main-block').html(curCode + newCodeBlock(BLOCKID))
         BLOCKID ++
     })
-
-
 });
 
 
