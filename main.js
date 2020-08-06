@@ -1,6 +1,16 @@
 var BLOCKID = 0 
 var BLOCKS = []
  
+execute = {
+    eval: eval
+}
+
+eval = (function(eval) {
+    return function(expr) {
+      return eval(expr);
+    };
+  })(eval);
+
 
 function newCodeBlock(num) {
     let codeBlock = 
@@ -14,7 +24,7 @@ function newCodeBlock(num) {
     
     $('body').on('click', `#run-code${num}`, function() {
         let code = $(`#code${num}`).val();
-        let res = eval(code)
+        let res = execute.eval(code)
         if (res != undefined) {
             console.log(res)
         }
@@ -35,8 +45,6 @@ function newCodeBlock(num) {
 
 
 $(document).ready(function(){
-    //$('#main-block').html(newCodeBlock(1) + newCodeBlock(2) + newCodeBlock(3));
-    
     $('#new-block').click(function() {
         let curCode = $('#main-block').html()
         $('#main-block').html(curCode + newCodeBlock(BLOCKID))
