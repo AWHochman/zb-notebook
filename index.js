@@ -30,6 +30,12 @@ function newCodeBlock(num) {
         $('#main-block').html(joinBlocks())
     })
 
+    $(`body`).on('keypress', `#code${num}`, function(event) {
+        if (event.which === 13 && event.shiftKey) {
+            runCell()
+        }
+      })
+
     $(`body`).on('click', `#code${num}`, function() {
         BLOCK_SELECTED_ID = num
     })
@@ -64,12 +70,7 @@ $(document).ready(function(){
     })
 
     $('#run-cell').click(function() {
-        runBlock(BLOCK_SELECTED_ID)
-        let lastId = findLastBlock()
-        if (getBlockCode(lastId) != ''){
-            newBlock()
-        }
-        BLOCK_SELECTED_ID ++
+        runCell()
     })
 
 });
@@ -227,4 +228,13 @@ function runAll() {
     if (getBlockCode(num) != ''){
         newBlock()
     }
+}
+
+function runCell() {
+    runBlock(BLOCK_SELECTED_ID)
+    let lastId = findLastBlock()
+    if (getBlockCode(lastId) != ''){
+        newBlock()
+    }
+    BLOCK_SELECTED_ID ++
 }
