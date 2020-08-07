@@ -1,5 +1,6 @@
 var BLOCKID = 0 
-var BLOCKS = []
+var BLOCKS = {}
+var BLOCK_SELECTED_ID = 0
  
 execute = {
     eval: eval
@@ -22,40 +23,72 @@ function newCodeBlock(num) {
             <h3 class="inline-block res" id="html-res${num}"><h3>
         </pre>
     </div>`
-    
-    $('body').on('click', `#run-code${num}`, function() {
-        let code = $(`#code${num}`).val();
-        let res = execute.eval(code)
 
-        let curCode = BLOCKS[num]
-        BLOCKS[num] = updateBlock(curCode, code, res, num)
-        if (lastBlock(num)){
+    $('body').on('click', `#run-code${num}`, function() {
+        runBlock(num)
+        let lastId = findLastBlock()
+        if (getBlockCode(lastId) != ''){
             newBlock()
         }
-        if (res != undefined) {
+    })
 
-            $(`#html-res${num}`).html(res)
-        } else {
-            $(`#html-res${num}`).html("")
-        }
+    $(`body`).on('blur', `#code${num}`, function() {
+        curCode = BLOCKS[num]
+        curInput = $(`#code${num}`).val()
+        res = $(`#html-res${num}`).html()
+        BLOCKS[num] = updateBlock(curCode, curInput, res, num) 
+        $('#main-block').html(joinBlocks())
+    })
+
+    $(`body`).on('click', `#code${num}`, function() {
+        BLOCK_SELECTED_ID = num
     })
 
     $('body').on('click', `#delete-code${num}`, function() {
-        for (i in BLOCKS) {
-            if (i == num) {
-                BLOCKS[i] = ''
-            }
-        }        
-        $('#main-block').html(BLOCKS.join(''))
+        BLOCKS[num] = undefined      
+        $('#main-block').html(joinBlocks())
     })
-    BLOCKS.push(codeBlock)
+
+   //BLOCKS.push(codeBlock)
     return codeBlock
 }
 
 
-
 $(document).ready(function(){
-    $('#new-block').click(newBlock())
+
+    $('#run-all').click(function() {
+        runAll()
+    })
+
+    $('#insert-cell-bottom').click(function() {
+        newBlock()
+    })
+
+    $('#insert-cell-below').click(function() {
+        newBlockSelected(true)
+    })
+
+    $('#insert-cell-above').click(function() {
+        newBlockSelected(false)
+    })
+
+    $('#run-all-cells').click(function() {
+        runAll()
+    })
+
+    $('#delete-cell').click(function() {
+        BLOCKS[BLOCK_SELECTED_ID] = undefined 
+        $('#main-block').html(joinBlocks())
+    })
+
+    $('#run-cell').click(function() {
+        runBlock(BLOCK_SELECTED_ID)
+        let lastId = findLastBlock()
+        if (getBlockCode(lastId) != ''){
+            newBlock()
+        }
+    })
+
 });
 
 
@@ -87,16 +120,130 @@ function updateBlockRes(curCode, res, num) {
 }
 
 function lastBlock(num) {
-    for (i=num+1; i<BLOCKS.length; i++) {
-        if (BLOCKS[i] != '') {
+    for (i=lenBlocks(); i>num; i--) {
+        if (BLOCKS[i] != undefined) {
             return false 
         }
     }
     return true
 }
 
+function newBlockSelected(below) {
+    if(below) {
+        newBlockId = BLOCK_SELECTED_ID + 1 
+    } else {
+        newBlockId = BLOCK_SELECTED_ID
+    }
+
+    if (newBlockId == lenBlocks()) {
+        newBlock()
+        return 
+    }
+
+    shiftBlocksDown(newBlockId)
+    let curCode = joinBlocks()
+    $('#main-block').html(curCode)
+    BLOCKID ++ 
+}
+
 function newBlock() {
-    let curCode = BLOCKS.join('')
-    $('#main-block').html(curCode + newCodeBlock(BLOCKID))
+    let curCode = joinBlocks()
+    let newBlock = newCodeBlock(BLOCKID)
+    $('#main-block').html(curCode + newBlock)
+    BLOCKS[BLOCKID] = newBlock
     BLOCKID ++
+}
+
+function runBlock(num) {
+    let code = $(`#code${num}`).val();
+        let res = execute.eval(code)
+
+        let curCode = BLOCKS[num]
+        BLOCKS[num] = updateBlock(curCode, code, res, num)
+        if (res != undefined) {
+            $(`#html-res${num}`).html(res)
+        } else {
+            $(`#html-res${num}`).html("")
+        }
+}
+
+function findLastBlock() {
+    for (i=lenBlocks(); i>=0; i--) {
+        if (BLOCKS[i] != undefined) {
+            return i
+        }
+    }
+}
+
+function getBlockCode(num) {
+    let curCode = BLOCKS[num]
+    let startText = `<textarea class="inline-block" id="code${num}" contenteditable=true>`
+    let entryIndexEnd = curCode.indexOf("</textarea>")
+    let entryIndexStart = curCode.indexOf(startText)
+    let startLen = startText.length
+    var curInput = curCode.slice(entryIndexStart+startLen, entryIndexEnd)
+    return curInput
+}
+
+function listBlocks() {
+    let res = []
+    for (k in BLOCKS) {
+        res.push(BLOCKS[k])
+    }
+    return res
+}
+
+function joinBlocks() {
+    let res = listBlocks()
+    return res.join('')
+}
+
+function lenBlocks() {
+    let size = 0 
+    for (key in BLOCKS) {
+        if (BLOCKS.hasOwnProperty(key)) size++;
+    }
+    return size
+}
+
+function shiftBlocksDown(newBlockId) {
+    newBlocks = {}
+    for (i=0; i < lenBlocks(); i++) {
+        if (i < newBlockId) {
+            newBlocks[i] = BLOCKS[i]
+
+        } else if (i == newBlockId) {
+            newBlocks[i] = newCodeBlock(newBlockId)
+            increasedBlock = increaseBlock(BLOCKS[i], i)
+            newBlocks[i+1] = increasedBlock
+
+        } else {
+            increasedBlock = increaseBlock(BLOCKS[i], i)
+            newBlocks[i+1] = increasedBlock
+        }
+    }
+    BLOCKS = newBlocks
+}
+
+function increaseBlock(html, num) {  
+    let newHtml = html.replace(`<p class="inline-block" style="margin: 1px"><a href="#" id="run-code${num}">Run</a></p>`, `<p class="inline-block" style="margin: 1px"><a href="#" id="run-code${num+1}">Run</a></p>`)
+    newHtml = newHtml.replace(`<textarea class="inline-block" id="code${num}" contenteditable=true></textarea>`, `<textarea class="inline-block" id="code${num+1}" contenteditable=true></textarea>`)
+    newHtml = newHtml.replace(`<h4 class="inline-block" id="delete-code${num}">`, `<h4 class="inline-block" id="delete-code${num+1}">`)
+    newHtml = newHtml.replace(`<h3 class="inline-block res" id="html-res${num}">`, `<h3 class="inline-block res" id="html-res${num+1}">`)
+    return newHtml
+}
+
+function runAll() {
+    if (lenBlocks() == 0) {
+        return 
+    }
+    for (i in BLOCKS) {
+        if (BLOCKS[i] != undefined) {
+            runBlock(i)
+        }
+    }
+    let num = findLastBlock()
+    if (getBlockCode(num) != ''){
+        newBlock()
+    }
 }
