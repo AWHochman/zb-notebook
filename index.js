@@ -17,20 +17,10 @@ function newCodeBlock(num) {
     let codeBlock = 
     `<div id="codeblock">
         <pre>
-            <p class="inline-block" style="margin: 1px"><a href="#" id="run-code${num}">Run</a></p>
             <textarea class="inline-block" id="code${num}" contenteditable=true></textarea>
-            <h4 class="inline-block" id="delete-code${num}"><a href="#">Delete</a></h4>
             <h3 class="inline-block res" id="html-res${num}"><h3>
         </pre>
     </div>`
-
-    $('body').on('click', `#run-code${num}`, function() {
-        runBlock(num)
-        let lastId = findLastBlock()
-        if (getBlockCode(lastId) != ''){
-            newBlock()
-        }
-    })
 
     $(`body`).on('blur', `#code${num}`, function() {
         curCode = BLOCKS[num]
@@ -42,11 +32,6 @@ function newCodeBlock(num) {
 
     $(`body`).on('click', `#code${num}`, function() {
         BLOCK_SELECTED_ID = num
-    })
-
-    $('body').on('click', `#delete-code${num}`, function() {
-        BLOCKS[num] = undefined      
-        $('#main-block').html(joinBlocks())
     })
 
    //BLOCKS.push(codeBlock)
@@ -226,9 +211,7 @@ function shiftBlocksDown(newBlockId) {
 }
 
 function increaseBlock(html, num) {  
-    let newHtml = html.replace(`<p class="inline-block" style="margin: 1px"><a href="#" id="run-code${num}">Run</a></p>`, `<p class="inline-block" style="margin: 1px"><a href="#" id="run-code${num+1}">Run</a></p>`)
-    newHtml = newHtml.replace(`<textarea class="inline-block" id="code${num}" contenteditable=true></textarea>`, `<textarea class="inline-block" id="code${num+1}" contenteditable=true></textarea>`)
-    newHtml = newHtml.replace(`<h4 class="inline-block" id="delete-code${num}">`, `<h4 class="inline-block" id="delete-code${num+1}">`)
+    let newHtml = newHtml.replace(`<textarea class="inline-block" id="code${num}" contenteditable=true></textarea>`, `<textarea class="inline-block" id="code${num+1}" contenteditable=true></textarea>`)
     newHtml = newHtml.replace(`<h3 class="inline-block res" id="html-res${num}">`, `<h3 class="inline-block res" id="html-res${num+1}">`)
     return newHtml
 }
