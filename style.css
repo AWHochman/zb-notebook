@@ -1,29 +1,29 @@
 textarea {
-    background-color: #eee;
+    background-color: rgb(233, 231, 231);
     border: 1px solid #999;
     display: block;
     padding: 7px;
-    width: 80%;
+    width: 90%;
     float: left;
-    margin-left: 40px;
-    /* resize: none; */
+    margin-left: 50px;
+    resize: none;
     line-height: 10px;
     height: 10px;
 }
-
-p {
-    display: block;
-    position: absolute;
-}
-
+/* 
 h4 {
     display: block;
     position: absolute;
     margin-top: 1px;
-}
+} */
 
 .res {
     display: block;
-    margin-left: 60px;
-    margin-top: -50;
+    margin-left: 55px;
+}
+
+.main-block {
+    margin-top: 100px;
+    padding: 40px;
+    background-color: rgb(235, 233, 233);
 }

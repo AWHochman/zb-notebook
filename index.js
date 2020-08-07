@@ -57,13 +57,10 @@ $(document).ready(function(){
         newBlockSelected(false)
     })
 
-    $('#run-all-cells').click(function() {
-        runAll()
-    })
-
     $('#delete-cell').click(function() {
         BLOCKS[BLOCK_SELECTED_ID] = undefined 
         $('#main-block').html(joinBlocks())
+        BLOCK_SELECTED_ID ++
     })
 
     $('#run-cell').click(function() {
@@ -72,6 +69,7 @@ $(document).ready(function(){
         if (getBlockCode(lastId) != ''){
             newBlock()
         }
+        BLOCK_SELECTED_ID ++
     })
 
 });
@@ -211,7 +209,7 @@ function shiftBlocksDown(newBlockId) {
 }
 
 function increaseBlock(html, num) {  
-    let newHtml = newHtml.replace(`<textarea class="inline-block" id="code${num}" contenteditable=true></textarea>`, `<textarea class="inline-block" id="code${num+1}" contenteditable=true></textarea>`)
+    let newHtml = html.replace(`<textarea class="inline-block" id="code${num}" contenteditable=true>`, `<textarea class="inline-block" id="code${num+1}" contenteditable=true>`)
     newHtml = newHtml.replace(`<h3 class="inline-block res" id="html-res${num}">`, `<h3 class="inline-block res" id="html-res${num+1}">`)
     return newHtml
 }
