@@ -29,6 +29,9 @@ function newCodeBlock(num) {
 
         let curCode = BLOCKS[num]
         BLOCKS[num] = updateBlock(curCode, code, res, num)
+        if (lastBlock(num)){
+            newBlock()
+        }
         if (res != undefined) {
 
             $(`#html-res${num}`).html(res)
@@ -52,22 +55,18 @@ function newCodeBlock(num) {
 
 
 $(document).ready(function(){
-    $('#new-block').click(function() {
-        let curCode = BLOCKS.join('')
-        $('#main-block').html(curCode + newCodeBlock(BLOCKID))
-        BLOCKID ++
-    })
+    $('#new-block').click(newBlock())
 });
 
 
 function updateBlock(curCode, code, res, num) {
-    updatedCode = updateBlockInput(curCode, code)
+    updatedCode = updateBlockInput(curCode, code, num)
     updatedCode2 = updateBlockRes(updatedCode, res, num)
     return updatedCode2
 }
 
-function updateBlockInput(curCode, code) {
-    let startText = "contenteditable=true>"
+function updateBlockInput(curCode, code, num) {
+    let startText = `<textarea class="inline-block" id="code${num}" contenteditable=true>`
     let entryIndexEnd = curCode.indexOf("</textarea>")
     let entryIndexStart = curCode.indexOf(startText)
     let startLen = startText.length
@@ -85,4 +84,19 @@ function updateBlockRes(curCode, res, num) {
         return newEntry
     }
     return curCode
+}
+
+function lastBlock(num) {
+    for (i=num+1; i<BLOCKS.length; i++) {
+        if (BLOCKS[i] != '') {
+            return false 
+        }
+    }
+    return true
+}
+
+function newBlock() {
+    let curCode = BLOCKS.join('')
+    $('#main-block').html(curCode + newCodeBlock(BLOCKID))
+    BLOCKID ++
 }
