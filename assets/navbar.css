@@ -5,6 +5,7 @@
     position: fixed;
     width: 100%;
     top: 0;
+    box-shadow: inset 2px 2px 2px 0px #d3d0d0;
   }
   
   /* Navigation links */

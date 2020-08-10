@@ -1,7 +1,8 @@
 textarea {
+    grid-row: 1;
+    grid-column: 1;
     background-color: rgb(233, 231, 231);
     border: 1px solid #999;
-    display: block;
     padding: 5px;
     padding-top: 3px;
     padding-bottom: 8px;
@@ -15,6 +16,7 @@ textarea {
     height: 10px;
     white-space: nowrap;
     font-family: 'Courier New', Courier, monospace;
+    box-shadow: inset 2px 2px 2px 0px #c7c6c6;
 }
 /* 
 h4 {
@@ -24,11 +26,12 @@ h4 {
 } */
 
 .res {
-    display: block;
-    float: left;
-    margin-left: 50px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    /* float: right; */
+    /* margin-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px; */
+    grid-column: 1;
+    grid-row: 1;
 }
 
 .main-block {
@@ -40,4 +43,9 @@ h4 {
     margin-left: 40px;
     margin-right: 40px;
     min-height: 60px;
+    box-shadow: inset 2px 2px 2px 0px #d3d0d0;
+}
+
+.codediv {
+    display: grid;
 }

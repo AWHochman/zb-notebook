@@ -12,7 +12,7 @@ eval = (function(eval) {
     };
   })(eval);
 
-// `<div id="codeblock">
+// `<div id="codeblock" class="codediv">
 // <pre>
 //     <textarea class="inline-block" id="code${num}" contenteditable=true></textarea>
 //     <h3 class="inline-block res" id="html-res${num}"><h3>
@@ -20,7 +20,7 @@ eval = (function(eval) {
 // </div>`
 
 function newCodeBlock(num) {
-    let codeBlock = `<div id="codeblock"><pre><textarea class="inline-block" id="code${num}" contenteditable=true></textarea><h3 class="inline-block res" id="html-res${num}"><h3></pre></div>`
+    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true></textarea><h3 class="inline-block res" id="html-res${num}"><h3></pre></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
         curCode = BLOCKS[num]
@@ -81,7 +81,12 @@ $(document).ready(function(){
     $('#delete-cell').click(function() {
         BLOCKS[BLOCK_SELECTED_ID] = undefined 
         $('#main-block').html(joinBlocks())
-        BLOCK_SELECTED_ID --
+        if(topBlock(BLOCK_SELECTED_ID)) {
+            increaseBlockSelectedId(BLOCK_SELECTED_ID)
+            console.log(1)
+        } else {
+            decreaseBlockSelectedId(BLOCK_SELECTED_ID)
+        }
         selectBlock(BLOCK_SELECTED_ID)
         autosize($('textarea'))
     })

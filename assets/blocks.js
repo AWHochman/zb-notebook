@@ -164,11 +164,38 @@ function runCell() {
     if (getBlockCode(lastId) != ''){
         newBlock()
     }
-    BLOCK_SELECTED_ID ++
+    increaseBlockSelectedId(BLOCK_SELECTED_ID)
     $('#main-block').html(joinBlocks())
     selectBlock(BLOCK_SELECTED_ID)
 }
 
 function selectBlock(blockId) {
     $(`#code${blockId}`).select()
+}
+
+function topBlock(num) {
+    for (i=0; i<num; i++) {
+        if (BLOCKS[i] != undefined) {
+            return false 
+        }
+    }
+    return true 
+}
+
+function increaseBlockSelectedId(curId) {
+    for (i=curId+1; i < lenBlocks(); i++) {
+        if (BLOCKS[i] != undefined) {
+            BLOCK_SELECTED_ID = i
+            return 
+        }
+    }
+}
+
+function decreaseBlockSelectedId(curId) {
+    for (i=curId-1; i >= 0; i--) {
+        if (BLOCKS[i] != undefined) {
+            BLOCK_SELECTED_ID = i 
+            return 
+        }
+    }
 }
