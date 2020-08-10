@@ -1,14 +1,17 @@
 textarea {
     background-color: rgb(233, 231, 231);
     border: 1px solid #999;
-    display: block;
-    padding: 7px;
+    display: flex;
+    padding: 5px;
+    padding-top: 3px;
+    padding-bottom: 8px;
     width: 90%;
     float: left;
     margin-left: 50px;
     resize: none;
-    line-height: 10px;
+    line-height: 15px;
     height: 10px;
+    white-space: nowrap;
 }
 /* 
 h4 {
@@ -23,6 +26,8 @@ h4 {
 }
 
 .main-block {
+    vertical-align: top;
+    overflow: auto;
     margin-top: 100px;
     padding: 40px;
     background-color: rgb(235, 233, 233);

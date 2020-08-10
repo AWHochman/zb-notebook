@@ -28,19 +28,26 @@ function newCodeBlock(num) {
         res = $(`#html-res${num}`).html()
         BLOCKS[num] = updateBlock(curCode, curInput, res, num) 
         $('#main-block').html(joinBlocks())
+
+        autosize($('textarea'))
     })
 
-    $(`body`).on('keypress', `#code${num}`, function(event) {
-        if (event.which === 13 && event.shiftKey) {
-            runCell()
-        }
-      })
+    // $(`body`).on('keypress', `#code${num}`, function(event) {
+    //     if (event.which === 13 && event.shiftKey) {
+    //         runCell()
+    //         autosize($('textarea'))
+    //     }
+    //   })
 
     $(`body`).on('click', `#code${num}`, function() {
         BLOCK_SELECTED_ID = num
+        autosize($('textarea'))
     })
 
-   //BLOCKS.push(codeBlock)
+    $(`body`).on('input', `#code${num}`, function() {
+        autosize($('textarea'))
+    })
+
     return codeBlock
 }
 
@@ -49,28 +56,35 @@ $(document).ready(function(){
 
     $('#run-all').click(function() {
         runAll()
+        autosize($('textarea'))
     })
 
     $('#insert-cell-bottom').click(function() {
         newBlock()
+        autosize($('textarea'))
     })
 
     $('#insert-cell-below').click(function() {
         newBlockSelected(true)
+        autosize($('textarea'))
     })
 
     $('#insert-cell-above').click(function() {
         newBlockSelected(false)
+        autosize($('textarea'))
     })
 
     $('#delete-cell').click(function() {
         BLOCKS[BLOCK_SELECTED_ID] = undefined 
         $('#main-block').html(joinBlocks())
         BLOCK_SELECTED_ID ++
+        selectBlock(BLOCK_SELECTED_ID)
+        autosize($('textarea'))
     })
 
     $('#run-cell').click(function() {
         runCell()
+        autosize($('textarea'))
     })
 
 });
@@ -128,6 +142,12 @@ function newBlockSelected(below) {
     let curCode = joinBlocks()
     $('#main-block').html(curCode)
     BLOCKID ++ 
+    
+    if(below) {
+        selectBlock(BLOCK_SELECTED_ID+1)
+    } else {
+        selectBlock(BLOCK_SELECTED_ID)
+    }
 }
 
 function newBlock() {
@@ -140,14 +160,14 @@ function newBlock() {
 
 function runBlock(num) {
     let code = $(`#code${num}`).val();
-        let res = execute.eval(code)
+    let res = execute.eval(code)
 
-        let curCode = BLOCKS[num]
-        BLOCKS[num] = updateBlock(curCode, code, res, num)
-        if (res != undefined) {
-            $(`#html-res${num}`).html(res)
-        } else {
-            $(`#html-res${num}`).html("")
+    let curCode = BLOCKS[num]
+    BLOCKS[num] = updateBlock(curCode, code, res, num)
+    if (res != undefined) {
+        $(`#html-res${num}`).html(res)
+    } else {
+        $(`#html-res${num}`).html("")
         }
 }
 
@@ -237,4 +257,9 @@ function runCell() {
         newBlock()
     }
     BLOCK_SELECTED_ID ++
+    selectBlock(BLOCK_SELECTED_ID)
+}
+
+function selectBlock(blockId) {
+    $(`#code${blockId}`).select()
 }
