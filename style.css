@@ -8,8 +8,8 @@ textarea {
     width: 90%;
     float: left;
     margin-left: 50px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     resize: none;
     line-height: 15px;
     height: 10px;
@@ -35,7 +35,7 @@ h4 {
     /* vertical-align: top; */
     overflow: auto;
     margin-top: 100px;
-    padding: 30px;
+    padding: 10px;
     background-color: rgb(245, 240, 240);
     margin-left: 40px;
     margin-right: 40px;
