@@ -12,15 +12,15 @@ eval = (function(eval) {
     };
   })(eval);
 
+// `<div id="codeblock">
+// <pre>
+//     <textarea class="inline-block" id="code${num}" contenteditable=true></textarea>
+//     <h3 class="inline-block res" id="html-res${num}"><h3>
+// </pre>
+// </div>`
 
 function newCodeBlock(num) {
-    let codeBlock = 
-    `<div id="codeblock">
-        <pre>
-            <textarea class="inline-block" id="code${num}" contenteditable=true></textarea>
-            <h3 class="inline-block res" id="html-res${num}"><h3>
-        </pre>
-    </div>`
+    let codeBlock = `<div id="codeblock"><pre><textarea class="inline-block" id="code${num}" contenteditable=true></textarea><h3 class="inline-block res" id="html-res${num}"><h3></pre></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
         curCode = BLOCKS[num]
@@ -161,6 +161,7 @@ function newBlock() {
 function runBlock(num) {
     let code = $(`#code${num}`).val();
     let res = execute.eval(code)
+    console.log(res)
 
     let curCode = BLOCKS[num]
     BLOCKS[num] = updateBlock(curCode, code, res, num)
@@ -241,7 +242,7 @@ function runAll() {
     }
     for (i in BLOCKS) {
         if (BLOCKS[i] != undefined) {
-            runBlock(i)
+            runCell(i)
         }
     }
     let num = findLastBlock()
@@ -257,6 +258,7 @@ function runCell() {
         newBlock()
     }
     BLOCK_SELECTED_ID ++
+    $('#main-block').html(joinBlocks())
     selectBlock(BLOCK_SELECTED_ID)
 }
 
