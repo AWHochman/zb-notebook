@@ -48,6 +48,10 @@ function newCodeBlock(num) {
         autosize($('textarea'))
     })
 
+    $(`body`).on('keydown', `#code${num}`, function(event) {
+        tabPressed(num, event)
+    })
+
     return codeBlock
 }
 
