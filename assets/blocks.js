@@ -148,9 +148,7 @@ function runAll() {
         return 
     }
     for (i in BLOCKS) {
-        if (BLOCKS[i] != undefined) {
-            runCell(i)
-        }
+        runCell(i)
     }
     let num = findLastBlock()
     if (getBlockCode(num) != ''){
@@ -159,6 +157,9 @@ function runAll() {
 }
 
 function runCell() {
+    if(BLOCKS[BLOCK_SELECTED_ID] == undefined) {
+        return 
+    }
     runBlock(BLOCK_SELECTED_ID)
     let lastId = findLastBlock()
     if (getBlockCode(lastId) != ''){

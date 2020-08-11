@@ -6,12 +6,13 @@ function downloadNotebook() {
     document.body.appendChild(a)
 
     let data = jsonifyBlocks(BLOCKS)
+    let name = $('#notebook-name').html()
 
     a.href = window.URL.createObjectURL(
     new Blob([data], { type })
     );
 
-    a.setAttribute("download", "zbtestfile.zbnb")
+    a.setAttribute("download", `${name}.zbnb`)
 
     a.click()
 
