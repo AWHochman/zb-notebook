@@ -26,12 +26,12 @@ h4 {
 } */
 
 .res {
-    /* float: right; */
-    /* margin-left: 50px;
-    margin-top: 5px;
-    margin-bottom: 5px; */
+    /* float: left; */
+    margin-left: 50px;
+    margin-top: 2px;
+    margin-bottom: 2px;
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 2;
 }
 
 .main-block {
@@ -48,4 +48,13 @@ h4 {
 
 .codediv {
     display: grid;
+}
+
+input {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
 }

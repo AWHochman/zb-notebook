@@ -16,7 +16,7 @@ function updateBlockInput(curCode, code, num) {
 function updateBlockRes(curCode, res, num) {
     if (res != undefined) {
         let startText = `<h3 class="inline-block res" id="html-res${num}">`
-        let entryIndexEnd = curCode.indexOf("<h3>")
+        let entryIndexEnd = curCode.indexOf("</h3>")
         let entryIndexStart = curCode.indexOf(startText)
         let startLen = startText.length
         var newEntry = curCode.slice(0, entryIndexStart+startLen) + res + curCode.slice(entryIndexEnd)
@@ -42,7 +42,7 @@ function newBlockSelected(below) {
     }
 
     if (newBlockId == lenBlocks()) {
-        newBlock()
+        newBlock('')
         return 
     }
 
@@ -58,9 +58,9 @@ function newBlockSelected(below) {
     }
 }
 
-function newBlock() {
+function newBlock(content) {
     let curCode = joinBlocks()
-    let newBlock = newCodeBlock(BLOCKID)
+    let newBlock = newCodeBlock(BLOCKID, content)
     $('#main-block').html(curCode + newBlock)
     BLOCKS[BLOCKID] = newBlock
     BLOCKID ++
@@ -76,7 +76,7 @@ function runBlock(num) {
         $(`#html-res${num}`).html(res)
     } else {
         $(`#html-res${num}`).html("")
-        }
+    }
 }
 
 function findLastBlock() {
@@ -125,7 +125,7 @@ function shiftBlocksDown(newBlockId) {
             newBlocks[i] = BLOCKS[i]
 
         } else if (i == newBlockId) {
-            newBlocks[i] = newCodeBlock(newBlockId)
+            newBlocks[i] = newCodeBlock(newBlockId, '')
             increasedBlock = increaseBlock(BLOCKS[i], i)
             newBlocks[i+1] = increasedBlock
 
@@ -154,7 +154,7 @@ function runAll() {
     }
     let num = findLastBlock()
     if (getBlockCode(num) != ''){
-        newBlock()
+        newBlock('')
     }
 }
 
@@ -162,7 +162,7 @@ function runCell() {
     runBlock(BLOCK_SELECTED_ID)
     let lastId = findLastBlock()
     if (getBlockCode(lastId) != ''){
-        newBlock()
+        newBlock('')
     }
     increaseBlockSelectedId(BLOCK_SELECTED_ID)
     $('#main-block').html(joinBlocks())

@@ -15,12 +15,12 @@ eval = (function(eval) {
 // `<div id="codeblock" class="codediv">
 // <pre>
 //     <textarea class="inline-block" id="code${num}" contenteditable=true></textarea>
-//     <h3 class="inline-block res" id="html-res${num}"><h3>
 // </pre>
+// <h3 class="inline-block res" id="html-res${num}"></h3>
 // </div>`
 
-function newCodeBlock(num) {
-    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true></textarea><h3 class="inline-block res" id="html-res${num}"><h3></pre></div>`
+function newCodeBlock(num, curCode) {
+    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea></pre><h3 class="inline-block res" id="html-res${num}"></h3></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
         curCode = BLOCKS[num]
@@ -64,7 +64,7 @@ $(document).ready(function(){
     })
 
     $('#insert-cell-bottom').click(function() {
-        newBlock()
+        newBlock('')
         autosize($('textarea'))
     })
 
@@ -83,7 +83,6 @@ $(document).ready(function(){
         $('#main-block').html(joinBlocks())
         if(topBlock(BLOCK_SELECTED_ID)) {
             increaseBlockSelectedId(BLOCK_SELECTED_ID)
-            console.log(1)
         } else {
             decreaseBlockSelectedId(BLOCK_SELECTED_ID)
         }
@@ -94,6 +93,21 @@ $(document).ready(function(){
     $('#run-cell').click(function() {
         runCell()
         autosize($('textarea'))
+    })
+
+    $('#download-notebook').click(function() {
+        downloadNotebook(BLOCKS, BLOCKID)
+    })
+
+    $('#open-notebook').change(function(e) {
+        let file = e.target.files[0]
+        const reader = new FileReader()
+        reader.onload = function() {
+            let content = reader.result
+            loadNotebooks(content)
+        }
+        reader.readAsText(file)
+
     })
 
 });

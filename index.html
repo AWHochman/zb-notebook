@@ -8,6 +8,7 @@
     <script src="assets/autosize.js" type="text/javascript"></script>
     <script src="assets/blocks.js" type="text/javascript"></script>
     <script src="assets/textareatab.js" type="text/javascript"></script>
+    <script src="assets/files.js"></script>
 
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="assets/navbar.css">
@@ -23,6 +24,9 @@
   <a id="run-all" href="#">Run All</a>
   <a id="run-cell" href="#">Run</a>
   <a id="delete-cell" href="#">Delete</a>
+  <a href="#"><label for="open-notebook">Open</label></a>
+  <input type="file" name="open-notebook" id="open-notebook" class="inputfile" />
+  <a id="download-notebook" href="#">Download</a>
   <div class="subnav">
     <button class="subnavbtn">Insert <i class="fa fa-caret-down"></i></button>
     <div class="subnav-content">
@@ -41,7 +45,7 @@
   </div>
 </div>
 <body style="background-color:gainsboro;">
-    <div id="main-block" class="main-block"></div>
+    <div id="main-block" class="main-block" spellcheck="false"></div>
 </body>
 </html>
 
