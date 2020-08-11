@@ -68,8 +68,14 @@ function newBlock(content) {
 
 function runBlock(num) {
     let code = $(`#code${num}`).val();
-    let res = execute.eval(code)
-
+    let res = undefined 
+    try {
+        res = execute.eval(code)
+      }
+      catch(error) {
+        res = error 
+      }
+    
     let curCode = BLOCKS[num]
     BLOCKS[num] = updateBlock(curCode, code, res, num)
     if (res != undefined) {
