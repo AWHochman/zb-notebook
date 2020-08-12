@@ -68,14 +68,17 @@ Nb.newBlock = function (content) {
     this.blocks[this.blockId] = {}
     this.blocks[this.blockId].html = newBlock
     this.selectBlock(this.blockId)
-    
+
+    if (this.blockId != 0) {
+        this.blockSelectedId ++
+    }
+
     this.blockId ++ 
-    this.blockSelectedId ++
 }
 
 Nb.runBlock = function (num) {
     let blockType = this.blocks[num].type 
-    if(blockType == CellTypes.js) {
+    if(blockType == CellTypes.js || blockType == undefined) {
         this.runBlockJs(num)
     } else if (blockType == CellTypes.md) {
         this.runBlockMd(num)
@@ -105,11 +108,9 @@ Nb.runBlockMd = function (num) {
     let code = $(`#code${num}`).val()
     let md = new Remarkable()
     let res = md.render(code)
-    console.log(res)
 
     this.blocks[num].html = this.updateBlock(code, res, num)
     $(`#html-res${num}`).html(res)
-    console.log(5)
 }
 
 Nb.findLastBlock = function () {
