@@ -52,5 +52,8 @@ function loadNotebooks(content) {
     for(i in blocks) {
         Nb.newBlock(blocks[i].html, blocks[i].type)
     }
+
+    Nb.runMarkDownBlocks()
+
     autosize($('textarea'))
 }

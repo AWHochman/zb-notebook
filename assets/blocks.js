@@ -333,3 +333,14 @@ Nb.clearBlockContents = function (blockId) {
 Nb.updatePage = function () {
     $('#main-block').html(this.joinBlocks())
 }
+
+Nb.runMarkDownBlocks = function () {
+    if (this.lenBlocks() == 0) {
+        return 
+    }
+    for (i in this.blocks) {
+        if (this.blocks[i].type == CellTypes.md) {
+            this.runCellAllVersion(i)
+        }
+    }
+}
