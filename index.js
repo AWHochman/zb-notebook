@@ -1,7 +1,10 @@
-var BLOCKID = 0 
-var BLOCKS = {}
-var BLOCK_SELECTED_ID = 0
- 
+const CellTypes = Object.freeze({"js":1, "md":2, "html":3})
+
+var Nb = {}
+Nb.blocks = {}
+Nb.blockId = 0
+Nb.blockSelectedId = 0 
+
 execute = {
     eval: eval
 }
@@ -23,11 +26,11 @@ function newCodeBlock(num, curCode) {
     let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea></pre><h3 class="inline-block res" id="html-res${num}"></h3></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
-        curCode = BLOCKS[num]
+        curCode = Nb.blocks[num].html
         curInput = $(`#code${num}`).val()
         res = $(`#html-res${num}`).html()
-        BLOCKS[num] = updateBlock(curCode, curInput, res, num) 
-        $('#main-block').html(joinBlocks())
+        Nb.blocks[num].html = Nb.updateBlock(curInput, res, num) 
+        $('#main-block').html(Nb.joinBlocks())
 
         autosize($('textarea'))
     })
@@ -40,7 +43,7 @@ function newCodeBlock(num, curCode) {
     //   })
 
     $(`body`).on('click', `#code${num}`, function() {
-        BLOCK_SELECTED_ID = num
+        Nb.blockSelectedId = num
         autosize($('textarea'))
     })
 
@@ -59,44 +62,56 @@ function newCodeBlock(num, curCode) {
 $(document).ready(function(){
 
     $('#run-all').click(function() {
-        runAll()
+        Nb.runAll()
         autosize($('textarea'))
     })
 
     $('#insert-cell-bottom').click(function() {
-        newBlock('')
+        Nb.newBlock('')
         autosize($('textarea'))
     })
 
     $('#insert-cell-below').click(function() {
-        newBlockSelected(true)
+        if(Nb.lenBlocks() == 0) {
+            Nb.newBlock('')
+        } else {
+            Nb.newBlockSelected(true)
+        }
         autosize($('textarea'))
     })
 
     $('#insert-cell-above').click(function() {
-        newBlockSelected(false)
+        if(Nb.lenBlocks() == 0) {
+            console.log("EEK")
+            Nb.newBlock('')
+        } else {
+            console.log("OOF")
+            Nb.newBlockSelected(false)
+        }
         autosize($('textarea'))
     })
 
     $('#delete-cell').click(function() {
-        BLOCKS[BLOCK_SELECTED_ID] = undefined 
-        $('#main-block').html(joinBlocks())
-        if(topBlock(BLOCK_SELECTED_ID)) {
-            increaseBlockSelectedId(BLOCK_SELECTED_ID)
+        Nb.blocks[Nb.blockSelectedId] = undefined 
+        $('#main-block').html(Nb.joinBlocks())
+
+        if(Nb.topBlock(Nb.blockSelectedId)) {
+            Nb.increaseBlockSelectedId()
         } else {
-            decreaseBlockSelectedId(BLOCK_SELECTED_ID)
+            Nb.decreaseBlockSelectedId()
         }
-        selectBlock(BLOCK_SELECTED_ID)
+
+        Nb.selectBlock(Nb.blockSelectedId)
         autosize($('textarea'))
     })
 
     $('#run-cell').click(function() {
-        runCell()
+        Nb.runCell()
         autosize($('textarea'))
     })
 
     $('#download-notebook').click(function() {
-        downloadNotebook(BLOCKS, BLOCKID)
+        downloadNotebook()
     })
 
     $('#open-notebook').change(function(e) {
@@ -107,7 +122,16 @@ $(document).ready(function(){
             loadNotebooks(content)
         }
         reader.readAsText(file)
-
     })
+
+    $('#cell-type-md').click(function() {
+        Nb.setCellType(CellTypes.md)
+    })
+
+    $('#cell-type-js').click(function() {
+        Nb.setCellType(CellTypes.js)
+    })
+
+
 
 });

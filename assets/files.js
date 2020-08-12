@@ -5,7 +5,7 @@ function downloadNotebook() {
     a.style.display = "none"
     document.body.appendChild(a)
 
-    let data = jsonifyBlocks(BLOCKS)
+    let data = jsonifyBlocks(Nb.blocks)
     let name = $('#notebook-name').html()
 
     a.href = window.URL.createObjectURL(
@@ -23,9 +23,9 @@ function downloadNotebook() {
 function jsonifyBlocks() {
     fileData = {}
     jsonBlocks = []
-    for(block in BLOCKS) {
-        if(BLOCKS[block] != undefined) {
-            let content = getBlockContent(BLOCKS[block])
+    for(block in Nb.blocks) {
+        if(Nb.blocks[block] != undefined) {
+            let content = getBlockContent(Nb.blocks[block].html)
             jsonBlocks.push(content)
         }
     }
@@ -45,9 +45,9 @@ function getBlockContent(block) {
 function loadNotebooks(content) {
     let fileData = JSON.parse(content)
     content = fileData["blocks"]
-    BLOCKID = 0
+    Nb.blockId = 0
     for(i in content) {
-        newBlock(content[i])
+        Nb.newBlock(content[i])
     }
     autosize($('textarea'))
 }
