@@ -5,6 +5,25 @@ Nb.updateBlock = function (code, res, num) {
     return updatedCode2
 }
 
+Nb.updateBlockMd = function (code, res, num) {
+    let curCode = this.blocks[num].html 
+    updatedCode = this.updateBlockInput(curCode, code, num)
+    updatedCode2 = this.updateBlockResMd(updatedCode, res, num)
+    return updatedCode2
+}
+
+Nb.updateBlockResMd = function (curCode, res, num) {
+    if (res != undefined) {
+        let startText = `<div id=md-res${num} class="md-div">`
+        let entryIndexEnd = curCode.indexOf("</div>")
+        let entryIndexStart = curCode.indexOf(startText)
+        let startLen = startText.length
+        var newEntry = curCode.slice(0, entryIndexStart+startLen) + res + curCode.slice(entryIndexEnd)
+        return newEntry
+    }
+    return curCode
+}
+
 Nb.updateBlockInput = function (curCode, code, num) {
     let startText = `<textarea class="inline-block" id="code${num}" contenteditable=true>`
     let entryIndexEnd = curCode.indexOf("</textarea>")
@@ -97,11 +116,11 @@ Nb.runBlockJs = function (num) {
       }
     
     this.blocks[num].html = this.updateBlock(code, res, num)
-    if (res != undefined) {
-        $(`#html-res${num}`).html(res)
-    } else {
-        $(`#html-res${num}`).html("")
-    }
+    // if (res != undefined) {
+    //     $(`#html-res${num}`).html(res)
+    // } else {
+    //     $(`#html-res${num}`).html("")
+    // }
 }
 
 Nb.runBlockMd = function (num) {
@@ -109,8 +128,9 @@ Nb.runBlockMd = function (num) {
     let md = new Remarkable()
     let res = md.render(code)
 
-    this.blocks[num].html = this.updateBlock(code, res, num)
-    $(`#html-res${num}`).html(res)
+    this.blocks[num].md = res
+    this.blocks[num].html = this.updateBlockMd(code, res, num)
+    // $(`#html-res${num}`).html(res)
 }
 
 Nb.findLastBlock = function () {

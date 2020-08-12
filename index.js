@@ -23,7 +23,7 @@ eval = (function(eval) {
 // </div>`
 
 function newCodeBlock(num, curCode) {
-    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea></pre><h3 class="inline-block res" id="html-res${num}"></h3></div>`
+    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea></pre><h3 class="inline-block res" id="html-res${num}"></h3><div id=md-res${num} class="md-div"></div></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
         curCode = Nb.blocks[num].html

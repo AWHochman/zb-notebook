@@ -58,3 +58,11 @@ input {
 	position: absolute;
 	z-index: -1;
 }
+
+.md-div {
+    padding: 1px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
