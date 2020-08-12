@@ -208,12 +208,25 @@ Nb.runAll = function () {
         return 
     }
     for (i in this.blocks) {
-        this.runCell(i)
+        console.log(i)
+        this.runCellAllVersion(i)
     }
     let num = this.findLastBlock()
     if (this.getBlockCode(num) != ''){
         this.newBlock('')
     }
+}
+
+Nb.runCellAllVersion = function (num) {
+    if (this.blocks[num] == undefined) {
+        return 
+    }
+    this.runBlock(num)
+    let lastId = this.findLastBlock()
+    if (this.getBlockCode(lastId) != '') {
+        this.newBlock('')
+    }
+    $('#main-block').html(this.joinBlocks())
 }
 
 Nb.runCell = function () {
