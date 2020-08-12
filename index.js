@@ -67,13 +67,13 @@ $(document).ready(function(){
     })
 
     $('#insert-cell-bottom').click(function() {
-        Nb.newBlock('')
+        Nb.newBlock('', CellTypes.js)
         autosize($('textarea'))
     })
 
     $('#insert-cell-below').click(function() {
         if(Nb.lenBlocks() == 0) {
-            Nb.newBlock('')
+            Nb.newBlock('', CellTypes.js)
         } else {
             Nb.newBlockSelected(true)
         }
@@ -82,7 +82,7 @@ $(document).ready(function(){
 
     $('#insert-cell-above').click(function() {
         if(Nb.lenBlocks() == 0) {
-            Nb.newBlock('')
+            Nb.newBlock('', CellTypes.js)
         } else {
             Nb.newBlockSelected(false)
         }
@@ -123,11 +123,11 @@ $(document).ready(function(){
     })
 
     $('#cell-type-md').click(function() {
-        Nb.setCellType(CellTypes.md)
+        Nb.setCellType(CellTypes.md, true)
     })
 
     $('#cell-type-js').click(function() {
-        Nb.setCellType(CellTypes.js)
+        Nb.setCellType(CellTypes.js, true)
     })
 
 

@@ -63,7 +63,7 @@ Nb.newBlockSelected = function (below) {
     }
 
     if (newBlockId == this.lenBlocks()) {
-        this.newBlock('')
+        this.newBlock('', CellTypes.js)
         return 
     }
     
@@ -80,13 +80,19 @@ Nb.newBlockSelected = function (below) {
     }
 }
 
-Nb.newBlock = function (content) {
+Nb.newBlock = function (content, blockType) {
     let curCode = this.joinBlocks()
     let newBlock = newCodeBlock(this.blockId, content)
+
     $('#main-block').html(curCode + newBlock)
+
     this.blocks[this.blockId] = {}
     this.blocks[this.blockId].html = newBlock
+    this.blocks[this.blockId].type = blockType
     this.selectBlock(this.blockId)
+
+    this.setCellType(blockType, false)
+    this.updatePage()
 
     if (this.blockId != 0) {
         this.blockSelectedId ++
@@ -214,7 +220,7 @@ Nb.runAll = function () {
     }
     let num = this.findLastBlock()
     if (this.getBlockCode(num) != ''){
-        this.newBlock('')
+        this.newBlock('', CellTypes.js)
     }
 }
 
@@ -225,7 +231,7 @@ Nb.runCellAllVersion = function (num) {
     this.runBlock(num)
     let lastId = this.findLastBlock()
     if (this.getBlockCode(lastId) != '') {
-        this.newBlock('')
+        this.newBlock('', CellType.js)
     }
     this.updatePage()
 }
@@ -237,7 +243,7 @@ Nb.runCell = function () {
     this.runBlock(this.blockSelectedId)
     let lastId = this.findLastBlock()
     if (this.getBlockCode(lastId) != ''){
-        this.newBlock('')
+        this.newBlock('', CellTypes.js)
     }
     this.increaseBlockSelectedId()
     this.updatePage()
@@ -277,14 +283,14 @@ Nb.decreaseBlockSelectedId = function () {
     }
 }
 
-Nb.setCellType = function(cellType) {
+Nb.setCellType = function(cellType, clearContents) {
     let blockId = this.blockSelectedId
 
-    this.setBlockTypeIcon(cellType, blockId)
+    this.setBlockTypeIcon(cellType, blockId, clearContents)
     this.blocks[blockId].type = cellType
 }  
 
-Nb.setBlockTypeIcon = function(cellType, blockId) {
+Nb.setBlockTypeIcon = function(cellType, blockId, clearContents) {
     let block = this.blocks[blockId]
     let cellHtml = block.html 
 
@@ -297,7 +303,11 @@ Nb.setBlockTypeIcon = function(cellType, blockId) {
     let updatedCellHtml = cellHtml.replace(ogIcon, replacementIcon)
 
     block.html = updatedCellHtml
-    block.html = this.clearBlockContents(blockId)
+
+    if (clearContents) {
+        console.log(1)
+        block.html = this.clearBlockContents(blockId)
+    }
 
     this.updatePage()
     autosize($('textarea'))

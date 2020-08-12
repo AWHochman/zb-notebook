@@ -26,10 +26,14 @@ function jsonifyBlocks() {
     for(block in Nb.blocks) {
         if(Nb.blocks[block] != undefined) {
             let content = getBlockContent(Nb.blocks[block].html)
-            jsonBlocks.push(content)
+            let curBlock = {}
+            curBlock.html = content 
+            curBlock.type = Nb.blocks[block].type
+            jsonBlocks.push(curBlock)
         }
     }
     fileData["blocks"] = jsonBlocks
+    console.log(fileData)
     return JSON.stringify(fileData)
 }
 
@@ -44,10 +48,10 @@ function getBlockContent(block) {
 
 function loadNotebooks(content) {
     let fileData = JSON.parse(content)
-    content = fileData["blocks"]
+    let blocks = fileData["blocks"]
     Nb.blockId = 0
-    for(i in content) {
-        Nb.newBlock(content[i])
+    for(i in blocks) {
+        Nb.newBlock(blocks[i].html, blocks[i].type)
     }
     autosize($('textarea'))
 }
