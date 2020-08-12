@@ -33,7 +33,6 @@ function jsonifyBlocks() {
         }
     }
     fileData["blocks"] = jsonBlocks
-    console.log(fileData)
     return JSON.stringify(fileData)
 }
 

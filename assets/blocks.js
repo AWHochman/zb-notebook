@@ -88,10 +88,10 @@ Nb.newBlock = function (content, blockType) {
 
     this.blocks[this.blockId] = {}
     this.blocks[this.blockId].html = newBlock
-    this.blocks[this.blockId].type = blockType
+    this.setCellType(blockType, false)
+    
     this.selectBlock(this.blockId)
 
-    this.setCellType(blockType, false)
     this.updatePage()
 
     if (this.blockId != 0) {
@@ -286,8 +286,15 @@ Nb.decreaseBlockSelectedId = function () {
 Nb.setCellType = function(cellType, clearContents) {
     let blockId = this.blockSelectedId
 
+    if (!clearContents) {
+        blockId = this.blockId
+    }
+
     this.setBlockTypeIcon(cellType, blockId, clearContents)
     this.blocks[blockId].type = cellType
+
+    this.updatePage()
+    autosize($('textarea'))
 }  
 
 Nb.setBlockTypeIcon = function(cellType, blockId, clearContents) {
@@ -305,12 +312,8 @@ Nb.setBlockTypeIcon = function(cellType, blockId, clearContents) {
     block.html = updatedCellHtml
 
     if (clearContents) {
-        console.log(1)
         block.html = this.clearBlockContents(blockId)
     }
-
-    this.updatePage()
-    autosize($('textarea'))
 }
 
 Nb.parseCellTypes = function (cellType) {
