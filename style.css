@@ -18,12 +18,14 @@ textarea {
     font-family: 'Courier New', Courier, monospace;
     box-shadow: inset 2px 2px 2px 0px #c7c6c6;
 }
-/* 
-h4 {
-    display: block;
-    position: absolute;
-    margin-top: 1px;
-} */
+
+p {
+    display: grid;
+    font-weight: bold;
+    position: absolute; 
+    margin-top: 11px;
+    margin-left: 15px;
+}
 
 .res {
     /* float: left; */
@@ -62,7 +64,7 @@ input {
 .md-div {
     padding: 1px;
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     margin-left: 50px;
     margin-right: 50px;
 }

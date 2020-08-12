@@ -23,14 +23,14 @@ eval = (function(eval) {
 // </div>`
 
 function newCodeBlock(num, curCode) {
-    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea></pre><h3 class="inline-block res" id="html-res${num}"></h3><div id=md-res${num} class="md-div"></div></div>`
+    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea><p id="cell-type${num}">js<p></pre><h3 class="inline-block res" id="html-res${num}"></h3><div id=md-res${num} class="md-div"></div></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
         curCode = Nb.blocks[num].html
         curInput = $(`#code${num}`).val()
         res = $(`#html-res${num}`).html()
         Nb.blocks[num].html = Nb.updateBlock(curInput, res, num) 
-        $('#main-block').html(Nb.joinBlocks())
+        Nb.updatePage()
 
         autosize($('textarea'))
     })
@@ -82,10 +82,8 @@ $(document).ready(function(){
 
     $('#insert-cell-above').click(function() {
         if(Nb.lenBlocks() == 0) {
-            console.log("EEK")
             Nb.newBlock('')
         } else {
-            console.log("OOF")
             Nb.newBlockSelected(false)
         }
         autosize($('textarea'))
@@ -93,7 +91,7 @@ $(document).ready(function(){
 
     $('#delete-cell').click(function() {
         Nb.blocks[Nb.blockSelectedId] = undefined 
-        $('#main-block').html(Nb.joinBlocks())
+        Nb.updatePage()
 
         if(Nb.topBlock(Nb.blockSelectedId)) {
             Nb.increaseBlockSelectedId()

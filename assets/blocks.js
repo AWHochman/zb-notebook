@@ -200,6 +200,8 @@ Nb.shiftBlocksDown = function (newBlockId) {
 Nb.increaseBlock = function (html, num) {  
     let newHtml = html.replace(`<textarea class="inline-block" id="code${num}" contenteditable=true>`, `<textarea class="inline-block" id="code${num+1}" contenteditable=true>`)
     newHtml = newHtml.replace(`<h3 class="inline-block res" id="html-res${num}">`, `<h3 class="inline-block res" id="html-res${num+1}">`)
+    newHtml = newHtml.replace(`<div id=md-res${num} class="md-div">`, `<div id=md-res${num+1} class="md-div">`)
+    newHtml = newHtml.replace(`<p id="cell-type${num}">`, `<p id="cell-type${num+1}">`)
     return newHtml
 }
 
@@ -208,7 +210,6 @@ Nb.runAll = function () {
         return 
     }
     for (i in this.blocks) {
-        console.log(i)
         this.runCellAllVersion(i)
     }
     let num = this.findLastBlock()
@@ -226,7 +227,7 @@ Nb.runCellAllVersion = function (num) {
     if (this.getBlockCode(lastId) != '') {
         this.newBlock('')
     }
-    $('#main-block').html(this.joinBlocks())
+    this.updatePage()
 }
 
 Nb.runCell = function () {
@@ -239,7 +240,7 @@ Nb.runCell = function () {
         this.newBlock('')
     }
     this.increaseBlockSelectedId()
-    $('#main-block').html(this.joinBlocks())
+    this.updatePage()
     this.selectBlock(this.blockSelectedId)
 }
 
@@ -277,5 +278,45 @@ Nb.decreaseBlockSelectedId = function () {
 }
 
 Nb.setCellType = function(cellType) {
-    this.blocks[this.blockSelectedId].type = cellType
+    let blockId = this.blockSelectedId
+
+    this.setBlockTypeIcon(cellType, blockId)
+    this.blocks[blockId].type = cellType
+}  
+
+Nb.setBlockTypeIcon = function(cellType, blockId) {
+    let block = this.blocks[blockId]
+    let cellHtml = block.html 
+
+    let curCellType = this.parseCellTypes(block.type)
+    let newCellType = this.parseCellTypes(cellType)
+
+    let ogIcon = `<p id="cell-type${blockId}">${curCellType}<p>`
+    let replacementIcon = `<p id="cell-type${blockId}">${newCellType}<p>`
+
+    let updatedCellHtml = cellHtml.replace(ogIcon, replacementIcon)
+
+    block.html = updatedCellHtml
+    block.html = this.clearBlockContents(blockId)
+
+    this.updatePage()
+    autosize($('textarea'))
+}
+
+Nb.parseCellTypes = function (cellType) {
+    if (cellType == CellTypes.js || cellType == undefined) {
+        return "js"
+    } else if (cellType == CellTypes.md) {
+        return "md"
+    } else if (cellType == CellTypes.html) {
+        return "html"
+    }
+}
+
+Nb.clearBlockContents = function (blockId) {
+    return this.updateBlock('', '', blockId)
+}
+
+Nb.updatePage = function () {
+    $('#main-block').html(this.joinBlocks())
 }
