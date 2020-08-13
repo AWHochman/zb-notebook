@@ -107,6 +107,8 @@ Nb.runBlock = function (num) {
         this.runBlockJs(num)
     } else if (blockType == CellTypes.md) {
         this.runBlockMd(num)
+    } else if (blockType == CellTypes.jsAsync) {
+        this.runBlockJsAsync(num)
     }
 }
 
@@ -137,6 +139,23 @@ Nb.runBlockMd = function (num) {
     this.blocks[num].md = res
     this.blocks[num].html = this.updateBlockMd(code, res, num)
     // $(`#html-res${num}`).html(res)
+}
+
+Nb.runBlockJsAsync = function (num) {
+    let code = $(`#code${num}`).val()
+    let evalInput = `outputDiv = $('#md-res${num}')\n${code}`
+    let res = undefined
+    try {
+        console.log(evalInput)
+        execute.eval(evalInput)
+    } catch(error) {
+        res = error
+    }
+    if (res != undefined) {
+        this.blocks[num].html = this.updateBlock(code, res, num)
+    } else {
+        this.clearRes(num)
+    }
 }
 
 Nb.findLastBlock = function () {
@@ -321,8 +340,8 @@ Nb.parseCellTypes = function (cellType) {
         return "js"
     } else if (cellType == CellTypes.md) {
         return "md"
-    } else if (cellType == CellTypes.html) {
-        return "html"
+    } else if (cellType == CellTypes.jsAsync) {
+        return "jsA"
     }
 }
 
@@ -343,4 +362,15 @@ Nb.runMarkDownBlocks = function () {
             this.runCellAllVersion(i)
         }
     }
+}
+
+Nb.clearRes = function (num) {
+    let curCode = this.blocks[num].html
+    let startText = `<h3 class="inline-block res" id="html-res${num}">`
+    let entryIndexEnd = curCode.indexOf("</h3>")
+    let entryIndexStart = curCode.indexOf(startText)
+    let startLen = startText.length
+    let newEntry = curCode.slice(0, entryIndexStart+startLen) + curCode.slice(entryIndexEnd)
+    
+    this.blocks[num].html = newEntry
 }

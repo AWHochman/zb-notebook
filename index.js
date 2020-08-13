@@ -1,4 +1,4 @@
-const CellTypes = Object.freeze({"js":1, "md":2, "html":3})
+const CellTypes = Object.freeze({"js":1, "md":2, "jsAsync":3})
 
 var Nb = {}
 Nb.blocks = {}
@@ -128,6 +128,10 @@ $(document).ready(function(){
 
     $('#cell-type-js').click(function() {
         Nb.setCellType(CellTypes.js, true)
+    })
+
+    $('#cell-type-js-async').click(function() {
+        Nb.setCellType(CellTypes.jsAsync, true)
     })
 
 
