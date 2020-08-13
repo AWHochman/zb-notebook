@@ -143,7 +143,7 @@ Nb.runBlockMd = function (num) {
 
 Nb.runBlockJsAsync = function (num) {
     let code = $(`#code${num}`).val()
-    let evalInput = `outputDiv = $('#md-res${num}')\n${code}`
+    let evalInput = `let outputDiv = $('#md-res${num}');\n${code}`
     let res = undefined
     try {
         console.log(evalInput)
@@ -250,7 +250,7 @@ Nb.runCellAllVersion = function (num) {
     this.runBlock(num)
     let lastId = this.findLastBlock()
     if (this.getBlockCode(lastId) != '') {
-        this.newBlock('', CellType.js)
+        this.newBlock('', CellTypes.js)
     }
     this.updatePage()
 }
