@@ -143,11 +143,18 @@ Nb.runBlockMd = function (num) {
 
 Nb.runBlockJsAsync = function (num) {
     let code = $(`#code${num}`).val()
-    let evalInput = `let outputDiv = $('#md-res${num}');\n${code}`
+    outputDiv = {}
+    outputDivFunc = function (html) {
+        this.html = html
+    }
+    outputDiv.html = outputDivFunc
+    outputDiv.val = outputDivFunc
+
+    let evalInput = code
     let res = undefined
     try {
-        console.log(evalInput)
         execute.eval(evalInput)
+        this.blocks[num].html = this.updateBlockMd(evalInput, outputDiv.html, num)
     } catch(error) {
         res = error
     }
@@ -188,6 +195,9 @@ Nb.listBlocks = function () {
 
 Nb.joinBlocks = function () {
     let res = this.listBlocks()
+    // if (res.length == 0) {
+    //     return 
+    // }
     return res.join('')
 }
 
@@ -271,6 +281,7 @@ Nb.runCell = function () {
 
 Nb.selectBlock = function (blockId) {
     $(`#code${blockId}`).select()
+    cm = newCodeMirror(blockId)
 }
 
 Nb.topBlock = function (num) {

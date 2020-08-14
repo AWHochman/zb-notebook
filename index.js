@@ -23,14 +23,14 @@ eval = (function(eval) {
 // </div>`
 
 function newCodeBlock(num, curCode) {
-    let codeBlock = `<div id="codeblock" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea><p id="cell-type${num}">js<p></pre><h3 class="inline-block res" id="html-res${num}"></h3><div id=md-res${num} class="md-div"></div></div>`
+    let codeBlock = `<div id="codeblock${num}" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea><p id="cell-type${num}">js<p></pre><h3 class="inline-block res" id="html-res${num}"></h3><div id=md-res${num} class="md-div"></div></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
         curCode = Nb.blocks[num].html
         curInput = $(`#code${num}`).val()
         res = $(`#html-res${num}`).html()
         Nb.blocks[num].html = Nb.updateBlock(curInput, res, num) 
-        Nb.updatePage()
+        //Nb.updatePage()
 
         autosize($('textarea'))
     })
@@ -44,6 +44,7 @@ function newCodeBlock(num, curCode) {
 
     $(`body`).on('click', `#code${num}`, function() {
         Nb.blockSelectedId = num
+        cm = newCodeMirror(num)
         autosize($('textarea'))
     })
 
@@ -68,6 +69,7 @@ $(document).ready(function(){
 
     $('#insert-cell-bottom').click(function() {
         Nb.newBlock('', CellTypes.js)
+
         autosize($('textarea'))
     })
 
@@ -137,3 +139,39 @@ $(document).ready(function(){
 
 
 });
+
+
+function newCodeMirror(num) {
+    try {
+        if (Nb.blocks[num].type == CellTypes.js || Nb.blocks[num].type == CellTypes.jsAsync) {
+            return newCodeMirrorJs(num)
+        } else {
+            return newCodeMirrorMd(num)
+        }
+    } catch {
+        return 
+    }
+}
+
+function newCodeMirrorJs (num) {
+    let cm = CodeMirror.fromTextArea(document.getElementById(`code${num}`), {
+        viewportMargin: Infinity
+    })
+    $('.CodeMirror').addClass("codeblock")
+    cm.on("change", function() {
+        cm.save()
+    })
+    return cm
+}
+
+function newCodeMirrorMd(num) {
+    let cm = CodeMirror.fromTextArea(document.getElementById(`code${num}`), {
+        viewportMargin: Infinity,
+        mode: "markdown"
+    })
+    $('.CodeMirror').addClass("codeblock")
+    cm.on("change", function() {
+        cm.save()
+    })
+    return cm
+}
