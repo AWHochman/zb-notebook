@@ -19,6 +19,53 @@ textarea {
     box-shadow: inset 2px 2px 2px 0px #c7c6c6;
 }
 
+.CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+  }
+
+.codeblock {
+    grid-row: 1;
+    grid-column: 1;
+    background-color: rgb(233, 231, 231);
+    border: 1px solid #999;
+    padding: 5px;
+    padding-top: 3px;
+    padding-bottom: 8px;
+    width: 90%;
+    float: left;
+    margin-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    resize: none;
+    line-height: 15px;
+    /* height: 10px; */
+    white-space: nowrap;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: inset 2px 2px 2px 0px #c7c6c6;
+}
+
+code {
+    grid-row: 1;
+    grid-column: 1;
+    background-color: rgb(233, 231, 231);
+    border: 1px solid #999;
+    padding: 5px;
+    padding-top: 3px;
+    padding-bottom: 8px;
+    width: 90%;
+    float: left;
+    margin-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    resize: none;
+    line-height: 15px;
+    height: 10px;
+    white-space: nowrap;
+    font-family: 'Courier New', Courier, monospace;
+    box-shadow: inset 2px 2px 2px 0px #c7c6c6;
+}
+
 p {
     display: grid;
     font-weight: bold;
