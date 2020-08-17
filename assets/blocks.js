@@ -57,9 +57,9 @@ Nb.lastBlock = function (num) {
 Nb.newBlockSelected = function (below) {
 
     if(below) {
-        newBlockId = this.blockSelectedId 
+        newBlockId = this.blockSelectedId + 1
     } else {
-        newBlockId = this.blockSelectedId - 1
+        newBlockId = this.blockSelectedId 
     }
 
     if (newBlockId == this.lenBlocks()) {
@@ -280,8 +280,14 @@ Nb.runCell = function () {
 }
 
 Nb.selectBlock = function (blockId) {
+    if (this.blocks[blockId] == undefined) {
+        return 
+    }
+
     $(`#code${blockId}`).select()
-    cm = newCodeMirror(blockId)
+    if (this.blocks[blockId].cm == undefined) {
+        cm = newCodeMirror(blockId)
+    }
 }
 
 Nb.topBlock = function (num) {

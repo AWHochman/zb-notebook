@@ -23,14 +23,14 @@ eval = (function(eval) {
 // </div>`
 
 function newCodeBlock(num, curCode) {
-    let codeBlock = `<div id="codeblock${num}" class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea><p id="cell-type${num}">js<p></pre><h3 class="inline-block res" id="html-res${num}"></h3><div id=md-res${num} class="md-div"></div></div>`
+    let codeBlock = `<div class="codediv"><pre><textarea class="inline-block" id="code${num}" contenteditable=true>${curCode}</textarea><p id="cell-type${num}">js<p></pre><h3 class="inline-block res" id="html-res${num}"></h3><div id=md-res${num} class="md-div"></div></div>`
 
     $(`body`).on('blur', `#code${num}`, function() {
-        curCode = Nb.blocks[num].html
-        curInput = $(`#code${num}`).val()
-        res = $(`#html-res${num}`).html()
-        Nb.blocks[num].html = Nb.updateBlock(curInput, res, num) 
-        //Nb.updatePage()
+        // curCode = Nb.blocks[num].html
+        // curInput = $(`#code${num}`).val()
+        // res = $(`#html-res${num}`).html()
+        // Nb.blocks[num].html = Nb.updateBlock(curInput, res, num) 
+        // Nb.updatePage(num)
 
         autosize($('textarea'))
     })
@@ -44,7 +44,10 @@ function newCodeBlock(num, curCode) {
 
     $(`body`).on('click', `#code${num}`, function() {
         Nb.blockSelectedId = num
-        cm = newCodeMirror(num)
+        if (Nb.blocks[num].cm == undefined) {
+            cm = newCodeMirror(num)
+            Nb.blocks[num].cm = cm
+        }
         autosize($('textarea'))
     })
 
@@ -106,8 +109,10 @@ $(document).ready(function(){
     })
 
     $('#run-cell').click(function() {
+        let scrollAmount = window.pageYOffset
         Nb.runCell()
         autosize($('textarea'))
+        $("html, body").animate({ scrollTop: `${scrollAmount}` });
     })
 
     $('#download-notebook').click(function() {
@@ -161,6 +166,16 @@ function newCodeMirrorJs (num) {
     cm.on("change", function() {
         cm.save()
     })
+
+    cm.on("blur", function() {
+        Nb.blocks[num].cm = undefined
+        curCode = Nb.blocks[num].html
+        curInput = $(`#code${num}`).val()
+        res = $(`#html-res${num}`).html()
+        Nb.blocks[num].html = Nb.updateBlock(curInput, res, num) 
+        Nb.updatePage()
+        autosize($('textarea'))
+    })
     return cm
 }
 
@@ -172,6 +187,16 @@ function newCodeMirrorMd(num) {
     $('.CodeMirror').addClass("codeblock")
     cm.on("change", function() {
         cm.save()
+    })
+
+    cm.on("blur", function() {
+        Nb.blocks[num].cm = undefined
+        curCode = Nb.blocks[num].html
+        curInput = $(`#code${num}`).val()
+        res = $(`#md-res${num}`).html()
+        Nb.blocks[num].html = Nb.updateBlockMd(curInput, res, num) 
+        Nb.updatePage()
+        autosize($('textarea'))
     })
     return cm
 }
