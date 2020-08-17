@@ -66,8 +66,10 @@ function newCodeBlock(num, curCode) {
 $(document).ready(function(){
 
     $('#run-all').click(function() {
+        let scrollAmount = window.pageYOffset
         Nb.runAll()
         autosize($('textarea'))
+        $("html, body").animate({ scrollTop: `${scrollAmount}` })
     })
 
     $('#insert-cell-bottom').click(function() {
@@ -112,7 +114,7 @@ $(document).ready(function(){
         let scrollAmount = window.pageYOffset
         Nb.runCell()
         autosize($('textarea'))
-        $("html, body").animate({ scrollTop: `${scrollAmount}` });
+        $("html, body").animate({ scrollTop: `${scrollAmount}` })
     })
 
     $('#download-notebook').click(function() {
